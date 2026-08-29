@@ -12,7 +12,7 @@ Live at **https://kathakvancouver.com**.
 - Events are a Jekyll collection at `_events/*.md`. The homepage lists upcoming
   events above the directory. It hides the section when no event is upcoming.
 - Filtering is plain vanilla JS — toggle `data-neighborhood` classes on cards.
-- Deployed as an `nginx:alpine` static container on Coolify.
+- Built and deployed by GitHub Actions to GitHub Pages.
 
 ## Local development
 
@@ -71,19 +71,29 @@ the end automatically.
 ## Deployment
 
 ```bash
-git push origin main && bin/deploy
+git push origin main
 ```
 
-`bin/deploy` reads `.env` (gitignored) and triggers a build. Server addresses
-and deployment identifiers are in `DEPLOYMENT.local.md`, which is gitignored.
+GitHub Actions builds the site and publishes it to GitHub Pages. The workflow is
+`.github/workflows/pages.yml`. A push reaches the live site in about one minute.
+There is no deploy script and no server.
 
-### Local docker test
+The same workflow runs every day at 15:00 UTC. That daily build is what makes
+past events drop off the homepage, because Liquid computes the cutoff at build
+time. Do not remove the `schedule:` trigger.
+
+To publish without a code change:
 
 ```bash
-docker build -t kathakvancouver .
-docker run --rm -p 8080:80 kathakvancouver
-# open http://localhost:8080
+gh workflow run pages.yml --repo bibstha/kathakvancouver
 ```
+
+### Domain
+
+`kathakvancouver.com` points at GitHub Pages with A and AAAA records, DNS-only
+in Cloudflare. GitHub issues the certificate, and the `CNAME` file declares the
+domain. `www` is proxied by Cloudflare and a Redirect Rule sends it to the apex
+with a 301.
 
 ## Data principles
 

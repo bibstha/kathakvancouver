@@ -12,8 +12,8 @@ Lower Mainland of British Columbia.
   `_events/`. Both are Jekyll collections.
 - **Filter:** vanilla JS, toggling `data-neighborhood` on cards (no framework)
 - **Styling:** plain CSS in `assets/css/main.css` (Playfair Display + Inter)
-- **Runtime:** `nginx:alpine` serving the built `_site/`
-- **Hosting:** Coolify on the Homelab server
+- **Hosting:** GitHub Pages, built and deployed by GitHub Actions
+- **Domain:** `kathakvancouver.com`, DNS on Cloudflare
 
 ### Key files
 
@@ -28,9 +28,9 @@ about.md                # /about/
 submit.md               # /submit/
 assets/css/main.css     # all styling
 assets/favicon.svg
-Dockerfile              # multi-stage: jekyll build → nginx
-nginx.conf              # serves _site/, gzip on, sensible cache headers
-bin/deploy              # triggers Coolify deploy via API, polls until done
+CNAME                   # the custom domain, copied into _site/ by Jekyll
+.github/workflows/pages.yml  # build and deploy, plus the daily rebuild
+mise.toml               # ruby 4.0.6
 ```
 
 ### Adding an artist
@@ -99,56 +99,62 @@ bundle exec jekyll serve           # http://localhost:4000
 If `bundle` fails with a version error, install the matching bundler first:
 `mise exec -- gem install bundler:2.6.9`.
 
-`Gemfile.lock` is in git on purpose. The Dockerfile copies it before
-`bundle install`, so the image installs the locked versions. Without the file,
-the image resolves the newest gems. `COPY . .` then adds a lock that names
-different versions, and the build fails with `Bundler::GemNotFound`. Do not add
-`Gemfile.lock` back to `.gitignore`.
+`Gemfile.lock` is in git on purpose. The workflow uses `bundler-cache: true`,
+which needs the lock to restore the cache and to install the same gem versions
+that you use locally. Do not add `Gemfile.lock` back to `.gitignore`.
 
-Test the docker image locally:
-
-```bash
-docker build -t kathakvancouver .
-docker run --rm -p 8080:80 kathakvancouver
-# open http://localhost:8080
-```
+`mise.toml` pins Ruby 4.0.6. The workflow pins the same version. If you change
+one, change the other.
 
 ## Deployment
 
-Deployment details, server addresses, and Coolify identifiers are in
-`DEPLOYMENT.local.md`. That file is gitignored and stays on the maintainer
-machine.
-
-The short form:
+GitHub Actions builds the site and deploys it to GitHub Pages. There is no
+deploy script and no server to manage.
 
 ```bash
-git push origin main && bin/deploy
+git push origin main
 ```
 
-`bin/deploy` reads `.env`, calls the Coolify API, and polls until the deploy
-finishes. It usually takes about 2 minutes. `.env` is gitignored. See
-`.env.example` for the shape.
+That is the whole procedure. The workflow at `.github/workflows/pages.yml`
+builds with Jekyll and publishes the result. A push takes about one minute to
+reach the live site.
+
+To deploy without a code change, run the workflow by hand:
+
+```bash
+gh workflow run pages.yml --repo bibstha/kathakvancouver
+gh run watch $(gh run list --repo bibstha/kathakvancouver --limit 1 --json databaseId --jq '.[0].databaseId') --repo bibstha/kathakvancouver
+```
 
 ### Nightly rebuild (required for events)
 
 Liquid computes the upcoming and past cutoff at build time against `site.time`.
 The served page does not read the date again. A past event stays on the homepage
-until the next build. A daily rebuild keeps the event list correct.
+until the next build.
 
-Two conditions must hold:
+The workflow holds a `schedule:` trigger at 15:00 UTC every day. That is 08:00
+in Vancouver during summer time and 07:00 in winter. The daily run is what makes
+past events drop off. Do not remove it.
 
-1. **A daily job must trigger a build.** The Coolify server is on a private
-   network, so a hosted runner cannot reach it. The cron entry belongs on that
-   network. The exact line is in `DEPLOYMENT.local.md`.
+GitHub disables scheduled workflows in a repository with no activity for 60
+days. If events stop expiring, look at this first.
 
-2. **The Docker build cache must be off for this app.** The build stage runs
-   `COPY . .` and then `RUN bundle exec jekyll build`. On an unchanged git SHA,
-   Docker reuses that cached layer. The image then ships an identical site with
-   a frozen `site.time`. The daily job runs and changes nothing, and it reports
-   no error. After the first nightly run, make sure that the date moved.
+### Domain and TLS
 
-Until both conditions hold, delete a past event by hand. If you do not, it stays
-on the homepage.
+| Name | Handling |
+|---|---|
+| `kathakvancouver.com` | 4 A records and 4 AAAA records to GitHub Pages. DNS-only in Cloudflare. |
+| `www.kathakvancouver.com` | CNAME to `bibstha.github.io`, proxied by Cloudflare. |
+
+GitHub issues the Let's Encrypt certificate for the apex, and `CNAME` in the
+repository root declares the domain. The apex is deliberately not proxied.
+Cloudflare in front of Pages can break the HTTP-01 challenge that GitHub uses to
+renew that certificate.
+
+The certificate covers the apex only. A Cloudflare Redirect Rule answers `www`
+at the edge with a 301 to the apex, so `www` never reaches GitHub. That rule
+lives in the `http_request_dynamic_redirect` phase on the zone. The Cloudflare
+token in `.env.local` needs DNS Edit and Single Redirect Edit.
 
 ## Editorial principles
 

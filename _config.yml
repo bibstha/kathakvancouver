@@ -48,10 +48,9 @@ exclude:
   - Gemfile
   - Gemfile.lock
   - vendor
-  - Dockerfile
-  - docker-compose.yml
-  - bin
   - README.md
+  - CLAUDE.md
   - .env
-  - .env.example
+  - .env.local
+  - DEPLOYMENT.local.md
   - mise.toml
