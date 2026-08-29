@@ -1,0 +1,57 @@
+title: "Kathak Vancouver"
+tagline: "A directory of Kathak artists and teachers in the Lower Mainland"
+description: >-
+  A community directory of Kathak dancers, choreographers, and teachers across
+  Vancouver, Burnaby, Surrey, Richmond, Coquitlam and the rest of the Lower Mainland.
+  Find a teacher near you.
+url: "https://kathakvancouver.com"
+baseurl: ""
+lang: en
+# site.time drives the upcoming/past cutoff on the homepage. Keep it local.
+timezone: America/Vancouver
+
+permalink: /:slug/
+
+collections:
+  artists:
+    output: false
+  events:
+    output: false
+
+defaults:
+  - scope:
+      path: ""
+      type: artists
+    values:
+      layout: null
+  - scope:
+      path: ""
+      type: events
+    values:
+      layout: null
+
+plugins:
+  - jekyll-seo-tag
+  - jekyll-sitemap
+
+# Order here drives the filter buttons on the homepage. "All" is implicit.
+neighborhoods:
+  - Vancouver
+  - Burnaby
+  - Surrey
+  - Richmond
+  - Coquitlam
+  - North Vancouver
+  - New Westminster
+
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - vendor
+  - Dockerfile
+  - docker-compose.yml
+  - bin
+  - README.md
+  - .env
+  - .env.example
+  - mise.toml
