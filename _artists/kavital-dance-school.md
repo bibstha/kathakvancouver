@@ -4,6 +4,7 @@ neighborhood: Burnaby
 website: https://www.facebook.com/kavitaldanceschool/
 instagram:
 teaches: true
+image: kavital-dance-school
 tags:
   - Bharata Natyam
   - Established 1987
