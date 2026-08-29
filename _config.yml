@@ -55,3 +55,4 @@ exclude:
   - DEPLOYMENT.local.md
   - mise.toml
   - docs
+  - tools
