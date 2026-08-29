@@ -7,6 +7,8 @@ neighborhood: Burnaby
 host: Indian Classical Music Society of Vancouver
 link: https://www.icmsv.org/palak-dhiman-salon-series.html
 price: "$21"
+image: 2026-09-10-salon-series-palak-dhiman
+credit: Eliseo Santillan
 ---
 
 Vancouver Kathak artist Palak Dhiman performs a solo recital with live

@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300" viewBox="0 0 400 300" fill="none">
+  <title>Ghungroo: bells on the cord</title>
+  <path d="M24 62 Q200 150 376 62" stroke="#000" stroke-width="1.5"/>
+  <circle cx="24.0" cy="62.0" r="10.0" fill="#000"/>
+  <circle cx="59.2" cy="77.8" r="10.0" fill="#000"/>
+  <circle cx="94.4" cy="90.2" r="10.0" fill="#000"/>
+  <circle cx="129.6" cy="99.0" r="10.0" fill="#000"/>
+  <circle cx="164.8" cy="104.2" r="10.0" fill="#000"/>
+  <circle cx="200.0" cy="106.0" r="10.0" fill="#000"/>
+  <circle cx="235.2" cy="104.2" r="10.0" fill="#000"/>
+  <circle cx="270.4" cy="99.0" r="10.0" fill="#000"/>
+  <circle cx="305.6" cy="90.2" r="10.0" fill="#000"/>
+  <circle cx="340.8" cy="77.8" r="10.0" fill="#000"/>
+  <circle cx="376.0" cy="62.0" r="10.0" fill="#000"/>
+  <path d="M112 156 Q252 232 392 156" stroke="#000" stroke-width="1.5"/>
+  <circle cx="112.0" cy="156.0" r="7.0" fill="#000"/>
+  <circle cx="147.0" cy="172.6" r="7.0" fill="#000"/>
+  <circle cx="182.0" cy="184.5" r="7.0" fill="#000"/>
+  <circle cx="217.0" cy="191.6" r="7.0" fill="#000"/>
+  <circle cx="252.0" cy="194.0" r="7.0" fill="#000"/>
+  <circle cx="287.0" cy="191.6" r="7.0" fill="#000"/>
+  <circle cx="322.0" cy="184.5" r="7.0" fill="#000"/>
+  <circle cx="357.0" cy="172.6" r="7.0" fill="#000"/>
+  <circle cx="392.0" cy="156.0" r="7.0" fill="#000"/>
+</svg>

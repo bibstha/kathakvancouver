@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300" viewBox="0 0 400 300" fill="none">
+  <title>Chakkar: the turn</title>
+  <circle cx="272.0" cy="96.0" r="26.0" fill="none" stroke="#000" stroke-width="2"/>
+  <circle cx="272.0" cy="96.0" r="54.0" fill="none" stroke="#000" stroke-width="1.5"/>
+  <circle cx="272.0" cy="96.0" r="84.0" fill="none" stroke="#000" stroke-width="2.5"/>
+  <circle cx="272.0" cy="96.0" r="116.0" fill="none" stroke="#000" stroke-width="1.5"/>
+  <circle cx="272.0" cy="96.0" r="150.0" fill="none" stroke="#000" stroke-width="1.5"/>
+  <circle cx="272.0" cy="96.0" r="190.0" fill="none" stroke="#000" stroke-width="1.5"/>
+  <circle cx="272.0" cy="96.0" r="236.0" fill="none" stroke="#000" stroke-width="1.5"/>
+  <circle cx="272.0" cy="96.0" r="7.0" fill="#000"/>
+  <circle cx="160.5" cy="64.0" r="7.0" fill="#000"/>
+  <circle cx="182.8" cy="263.8" r="4.0" fill="#000"/>
+</svg>

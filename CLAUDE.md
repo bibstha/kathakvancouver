@@ -24,6 +24,10 @@ Lower Mainland of British Columbia.
 ```
 _artists/*.md           # one card per file
 _events/*.md            # one event card per file. Can be absent.
+assets/artists/*.jpg    # one photograph or logo per listing, in 3 widths
+assets/events/*.jpg     # one photograph per event, in 3 widths
+assets/motifs/*.svg     # five abstract Kathak figures, the fallback graphic
+tools/make-image.py     # builds the 3 widths from one source file
 _config.yml             # neighborhoods filter order, timezone, site metadata
 _layouts/default.html   # site shell (header, nav, footer)
 _layouts/page.html      # for /about and /submit
@@ -54,6 +58,9 @@ instagram: their_handle         # optional, no @
 youtube: https://...            # optional
 teaches: true                   # data only. The card no longer renders a badge,
                                 # because every listing sets it.
+image: artist-slug              # optional. Names a set of 3 widths in
+                                # assets/artists/. No extension, no path.
+                                # Without it the card shows a motif.
 tags:                           # optional. Rendered as one quiet meta line,
                                 # joined by " · ", not as a row of pills.
   - Lucknow Gharana
@@ -65,6 +72,56 @@ or personal phone numbers. The blurb is shown on the homepage card.
 ```
 
 The homepage sorts artists alphabetically by `name`.
+
+### Card and event graphics
+
+Every card and every event row leads with a 4:3 plate. The plate holds a
+photograph when the listing has one, and an abstract motif when it does not.
+
+**Photographs.** Build the files with `tools/make-image.py`, then set `image:`
+to the slug. The slug names a set of three widths, so it carries no extension
+and no path.
+
+```bash
+tools/make-image.py ~/photo.jpg assets/artists/artist-slug --fit
+tools/make-image.py ~/photo.jpg assets/artists/artist-slug --crop 0,220,1711,1503
+tools/make-image.py ~/logo.jpg  assets/artists/artist-slug --pad
+```
+
+`--fit` centre-crops to 4:3. `--crop` takes a box that is already 4:3, for when
+the centre is the wrong place to cut. `--pad` contains a logo on a white
+ground. Each run writes `slug-400.jpg`, `slug-600.jpg` and `slug-900.jpg`.
+
+Never hand a full-resolution file to the page. A card plate is at most 340 CSS
+pixels wide and an event tile is 240, so the `srcset` in `index.html` lets the
+browser take 400 on a plain screen, 600 for the event tile on a 2x screen, and
+900 for a card on a 2x screen. Add a width to `WIDTHS` and to both `srcset`
+attributes together, or not at all.
+
+Two rules govern what goes in:
+
+1. Ask the artist before you publish a photograph of them. A photograph on a
+   public website is not a license to republish it.
+2. Name the photographer in `credit:` when you know the name. The event row
+   renders it as one quiet line. A logo needs no credit.
+
+A school with no performance photograph can use its logo. `--pad` trims the
+border and centres the logo on white, so it fills the same plate as a
+photograph. `ghungroo-kathak-academy` is the example.
+
+**Motifs.** `assets/motifs/` holds five abstract figures from the Kathak
+vocabulary: `chakkar` (the turn), `ghungroo` (bells on a cord), `teentaal`
+(sixteen beats, with sam, tali, and khali marked), `tatkar` (one bar per
+footwork syllable) and `chakradar` (a phrase unrolling). Each is black on
+transparent, and the CSS uses it as a mask, not as an image. The figure
+therefore takes `--accent` and changes color with its section. Do not give a
+motif a fill color of its own.
+
+A card with no photograph picks its motif by position in the grid, so no two
+neighbors repeat. An event picks by day of month, so its motif never changes.
+
+Listings that still need a photograph: Amika Kushwaha, Kavital Dance School,
+TheiTaal Dance Academy.
 
 ### Adding an event
 
@@ -82,6 +139,8 @@ neighborhood: Surrey            # display only. Events have no filter.
 host: Example Academy           # optional
 link: https://example.com/tick  # optional, tickets or info
 price: "$25"                    # optional, "Free" is fine
+image: 2026-09-14-recital       # optional, a set in assets/events/
+credit: Photographer Name       # optional, shown under the event
 ---
 
 Two or three factual sentences.

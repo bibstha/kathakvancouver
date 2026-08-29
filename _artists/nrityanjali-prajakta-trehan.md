@@ -1,9 +1,10 @@
 ---
 name: Prajakta Trehan (Nrityanjali Dance School)
 neighborhood: Surrey
-website:
+website: https://www.facebook.com/Nrityanjalikathak
 instagram:
 teaches: true
+image: nrityanjali-prajakta-trehan
 tags:
   - Newton Cultural Centre
   - Kids and adults

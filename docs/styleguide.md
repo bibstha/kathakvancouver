@@ -491,8 +491,8 @@ the same height and sit on the same baseline.
 **Artist card**
 
 1. Photograph, 4:3, `--r-flat`. When there is no photograph, use a flat block
-   of the section accent at 12 percent opacity with the name set across it.
-   Do not use a letter in a circle.
+   of the section accent at 12 percent opacity carrying one abstract motif.
+   Do not use a letter in a circle. See 4.10.
 2. Name, card title size
 3. Neighborhood, meta size, `--ink-muted`
 4. Blurb, body size, two lines, no ellipsis
@@ -544,19 +544,81 @@ animation.
 Respect `prefers-reduced-motion: reduce`. Under that query, set every word to
 full opacity with no transform and no transition.
 
-### 4.9 The open problem
+### 4.9 The image problem, and how it was solved
 
-The styleguide above needs photographs. The card, the hero, and the event row
-are all built around an image.
+The styleguide above needs photographs. The card and the event row are both
+built around an image. The site had none.
 
-Three options, in order of preference:
+Three options were on the table:
 
 1. Ask each listed artist for one photograph and the right to publish it.
-   This is the only option that makes the site look like Darbar.
-2. Use one full-bleed hero photograph, licensed or taken locally, and keep
-   the cards text-only with the flat accent block.
-3. Keep the site text-only and drop the image slots from the card.
+2. Use one full-bleed hero photograph and keep the cards text-only.
+3. Keep the site text-only and drop the image slots.
 
-Option 3 is honest and will still look far better than the current page,
-because type, color, shape, and rhythm all change. It will not look like
-Darbar.
+The answer is 1 plus a fallback. Three of the seven listings now carry a real
+image, taken from the website of the artist with permission. The other four
+carry a motif (4.10) until a photograph arrives. The plate is the same shape
+in both cases, so the grid holds one rhythm while the collection fills in.
+
+Two rules stand. A photograph on a public website is not a license to
+republish it, so ask first. Name the photographer when the name is known.
+
+A survey of the seven listings found the real constraint. Two artists have no
+website at all. Two are on Facebook only, behind a login. One school publishes
+a gallery, but every frame is a promotional flyer with a phone number and a QR
+code across it. Only two listings had a clean photograph, and one more had a
+usable logo. A design that assumed photographs would have failed on more than
+half the grid. This is why the fallback is part of the system and not a patch.
+
+### 4.10 Motifs
+
+`assets/motifs/` holds five figures drawn from the Kathak vocabulary:
+
+| File | Figure |
+|---|---|
+| `chakkar.svg` | Concentric rings around one still centre. The turn. |
+| `ghungroo.svg` | Bells strung along two cords. |
+| `teentaal.svg` | Sixteen beats. Sam ringed, the two tali filled, the khali hollow. |
+| `tatkar.svg` | One bar per footwork syllable. Bar height follows the stress. |
+| `chakradar.svg` | A spiral. One phrase unrolling three times over. |
+
+Rules:
+
+- Each file is black on transparent, and the CSS uses it as a `mask`, not as
+  an image. The figure takes `--accent`, so it changes color with its section.
+  A motif never carries a color of its own.
+- One opacity, `.34`. The figure must read as a surface, not as an
+  illustration competing with the name below it.
+- The structure is information, not decoration. `teentaal.svg` marks the real
+  sam, tali, and khali of the taal. `tatkar.svg` puts the tallest bar on the
+  sam. Do not add a sixth motif that only looks like the others.
+- A card picks by position in the grid, so no two neighbors repeat. An event
+  picks by day of month, so an event keeps one motif for its whole life.
+
+Five is deliberate. The grid never exceeds three columns at `--maxw`, and five
+shares no factor with one, two, or three, so no motif ever sits directly above
+another of the same kind.
+
+### 4.11 Image widths
+
+Every photograph ships in three widths, 400, 600 and 900, built by
+`tools/make-image.py`. The `srcset` and `sizes` attributes in `index.html`
+carry all three, so the browser downloads one.
+
+The widths come from the plates, not from a habit:
+
+| Plate | CSS width | 1x | 2x | 3x |
+|---|---|---|---|---|
+| Card, wide screen | 336 | 400 | 900 | 900 |
+| Card, one column | ~331 | 400 | 900 | 900 |
+| Event tile, wide screen | 240 | 400 | 600 | 900 |
+| Event tile, narrow | 128 | 400 | 400 | 400 |
+
+The rule behind the table: a plate is small and fixed, so the file must be
+small and fixed too. A 240 pixel tile served a 1000 pixel file wastes about
+four fifths of the bytes it downloads, and no viewer ever sees the difference.
+Measure the plate first, then pick the widths.
+
+Give every `img` a `width`, a `height`, `loading="lazy"` and
+`decoding="async"`. The plate already holds its own shape through
+`aspect-ratio`, so the page never moves while an image arrives.

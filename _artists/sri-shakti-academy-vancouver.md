@@ -8,6 +8,7 @@ tags:
   - Jankiprasad / Benaras Gharana
   - North Shore
   - Workshops and camps
+image: sri-shakti-academy-vancouver
 ---
 
 Sri Shakti Academy Vancouver is the British Columbia branch of Sri Shakti

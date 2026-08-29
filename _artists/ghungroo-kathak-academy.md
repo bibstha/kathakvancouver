@@ -8,6 +8,7 @@ tags:
   - Pracheen Kala Kendra
   - Bollywood Kathak
   - Kids classes
+image: ghungroo-kathak-academy
 ---
 
 Ghungroo Kathak Academy is a school in Surrey. It is affiliated with **Pracheen

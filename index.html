@@ -18,6 +18,13 @@ title: "Kathak Vancouver: a directory of Kathak artists and teachers in the Lowe
   An event stays in the list for the whole of its last day (end_date, or date).
   The rows are captured first, so the section can hide when nothing is upcoming.
 {%- endcomment -%}
+{%- comment -%}
+  A listing with no photograph falls back to one of five abstract Kathak
+  motifs in assets/motifs/. A card picks by position, so no two neighbors in
+  the grid repeat. An event picks by day of month, so its motif never changes.
+{%- endcomment -%}
+{% assign motifs = "chakkar,ghungroo,teentaal,tatkar,chakradar" | split: "," %}
+
 {% assign today = site.time | date: "%Y-%m-%d" %}
 {% capture event_rows %}
   {% assign sorted_events = site.events | sort: 'date' %}
@@ -25,10 +32,23 @@ title: "Kathak Vancouver: a directory of Kathak artists and teachers in the Lowe
     {% assign until = e.end_date | default: e.date | date: "%Y-%m-%d" %}
     {% if until >= today %}
       <article class="event-row">
-        <div class="event-when" aria-hidden="true">
+        {%- if e.image -%}
+        <div class="event-when has-photo">
+          {%- assign b = '/assets/events/' | append: e.image | relative_url -%}
+          <img src="{{ b }}-600.jpg"
+               srcset="{{ b }}-400.jpg 400w, {{ b }}-600.jpg 600w, {{ b }}-900.jpg 900w"
+               sizes="(max-width: 640px) 128px, 240px"
+               alt="{{ e.title }}" width="900" height="675" loading="lazy" decoding="async">
           <span class="event-day">{{ e.date | date: "%-d" }}</span>
           <span class="event-month">{{ e.date | date: "%b" }}</span>
         </div>
+        {%- else -%}
+        {% assign mi = e.date | date: "%-d" | modulo: 5 %}
+        <div class="event-when plate" style="--motif: url('{{ "/assets/motifs/" | append: motifs[mi] | append: ".svg" | relative_url }}')">
+          <span class="event-day">{{ e.date | date: "%-d" }}</span>
+          <span class="event-month">{{ e.date | date: "%b" }}</span>
+        </div>
+        {%- endif -%}
         <div class="event-body">
           <h3 class="event-title">{{ e.title }}</h3>
           <div class="event-meta">
@@ -49,6 +69,7 @@ title: "Kathak Vancouver: a directory of Kathak artists and teachers in the Lowe
               <a href="{{ e.link }}" target="_blank" rel="noopener">Details and tickets<i class="arr"></i></a>
             </div>
           {% endif %}
+          {% if e.credit %}<p class="credit">Photo: {{ e.credit }}</p>{% endif %}
         </div>
       </article>
     {% endif %}
@@ -95,7 +116,19 @@ title: "Kathak Vancouver: a directory of Kathak artists and teachers in the Lowe
     <div class="grid" id="artist-grid">
       {% for artist in artists %}
         <article class="card" data-neighborhood="{{ artist.neighborhood | slugify }}">
-          <div class="card-plate"><h3>{{ artist.name }}</h3></div>
+          {%- if artist.image -%}
+          <div class="card-plate">
+            {%- assign b = '/assets/artists/' | append: artist.image | relative_url -%}
+            <img src="{{ b }}-600.jpg"
+                 srcset="{{ b }}-400.jpg 400w, {{ b }}-600.jpg 600w, {{ b }}-900.jpg 900w"
+                 sizes="(max-width: 699px) 90vw, 340px"
+                 alt="{{ artist.name }}" width="900" height="675" loading="lazy" decoding="async">
+          </div>
+          {%- else -%}
+          {% assign mi = forloop.index0 | modulo: 5 %}
+          <div class="card-plate plate" style="--motif: url('{{ "/assets/motifs/" | append: motifs[mi] | append: ".svg" | relative_url }}')"></div>
+          {%- endif -%}
+          <h3 class="card-name">{{ artist.name }}</h3>
           <div class="hood">{{ artist.neighborhood }}</div>
           <p class="blurb">{{ artist.content | strip_html | strip }}</p>
           {% if artist.tags and artist.tags.size > 0 %}

@@ -8,6 +8,7 @@ tags:
   - Place des Arts (Coquitlam)
   - Online classes
   - Adults and youth
+image: palak-dhiman
 ---
 
 Palak is a Kathak artist, educator, and collaborator in Vancouver. She performed

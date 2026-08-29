@@ -22,6 +22,7 @@ page, or the social media account of the artist. Each listing gives:
 - The website and the Instagram account, when they exist.
 - Whether the artist teaches now.
 - A short, factual description.
+- One photograph, when the artist gives us one to publish.
 
 This site does not list home addresses or personal phone numbers. It lists only
 the contact channels that the artist already shares in public.
