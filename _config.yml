@@ -54,3 +54,4 @@ exclude:
   - .env.local
   - DEPLOYMENT.local.md
   - mise.toml
+  - docs

@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400..900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="{{ '/assets/css/main.css' | relative_url }}">
   <link rel="icon" href="{{ '/assets/favicon.svg' | relative_url }}" type="image/svg+xml">
   {% seo %}
@@ -14,11 +14,8 @@
   <header class="site-header">
     <div class="wrap header-inner">
       <a class="brand" href="{{ '/' | relative_url }}">
-        <span class="brand-mark" aria-hidden="true">𑀢</span>
-        <span class="brand-text">
-          <span class="brand-title">Kathak Vancouver</span>
-          <span class="brand-sub">Lower Mainland directory</span>
-        </span>
+        <span class="brand-title">Kathak Vancouver</span>
+        <span class="brand-sub">Lower Mainland directory</span>
       </a>
       <nav class="site-nav">
         <a href="{{ '/' | relative_url }}">Home</a>
@@ -28,7 +25,7 @@
     </div>
   </header>
 
-  <main class="wrap site-main">
+  <main>
     {{ content }}
   </main>
 
@@ -40,8 +37,50 @@
         To add, correct, or remove a listing, see
         <a href="{{ '/submit/' | relative_url }}">Add yourself</a>.
       </p>
-      <p class="muted">© {{ 'now' | date: "%Y" }} Kathak Vancouver · Made in the Lower Mainland.</p>
+      <p>&copy; {{ 'now' | date: "%Y" }} Kathak Vancouver. Made in the Lower Mainland.</p>
     </div>
   </footer>
+
+<script>
+/* Split every page heading into words, then fade the words up one after
+   another when the heading scrolls into view. No library. */
+(function () {
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var STEP = 60;
+
+  var heads = document.querySelectorAll('h1, .section-head');
+  if (!heads.length) return;
+
+  heads.forEach(function (el) {
+    var words = el.textContent.trim().split(/\s+/);
+    el.textContent = '';
+    words.forEach(function (word, i) {
+      var span = document.createElement('span');
+      span.className = 'split-word';
+      span.textContent = word;
+      el.appendChild(span);
+      if (i < words.length - 1) el.appendChild(document.createTextNode(' '));
+    });
+  });
+
+  function reveal(el) {
+    el.querySelectorAll('.split-word').forEach(function (word, i) {
+      setTimeout(function () { word.classList.add('in'); }, i * STEP);
+    });
+  }
+
+  if (reduce || !window.IntersectionObserver) {
+    heads.forEach(reveal);
+    return;
+  }
+
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (e.isIntersecting) { reveal(e.target); io.unobserve(e.target); }
+    });
+  }, { threshold: 0.25 });
+  heads.forEach(function (el) { io.observe(el); });
+})();
+</script>
 </body>
 </html>

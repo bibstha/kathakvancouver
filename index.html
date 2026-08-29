@@ -3,8 +3,7 @@ layout: default
 title: "Kathak Vancouver: a directory of Kathak artists and teachers in the Lower Mainland"
 ---
 
-<section class="hero">
-  <span class="hero-tag">Lower Mainland · British Columbia</span>
+<section class="wrap hero s-ink">
   <h1>Find a Kathak teacher near you.</h1>
   <p class="lede">
     Teachers and artists perform and teach Kathak across the Lower Mainland. This
@@ -17,99 +16,103 @@ title: "Kathak Vancouver: a directory of Kathak artists and teachers in the Lowe
   Upcoming events. Liquid computes the cutoff at build time, so the site must
   rebuild every day for past events to drop off. See CLAUDE.md "Nightly rebuild".
   An event stays in the list for the whole of its last day (end_date, or date).
-  The cards are captured first, so the section can hide when nothing is upcoming.
+  The rows are captured first, so the section can hide when nothing is upcoming.
 {%- endcomment -%}
 {% assign today = site.time | date: "%Y-%m-%d" %}
-{% capture event_cards %}
+{% capture event_rows %}
   {% assign sorted_events = site.events | sort: 'date' %}
   {% for e in sorted_events %}
     {% assign until = e.end_date | default: e.date | date: "%Y-%m-%d" %}
     {% if until >= today %}
-      <article class="event-card">
+      <article class="event-row">
         <div class="event-when" aria-hidden="true">
-          <span class="event-month">{{ e.date | date: "%b" | upcase }}</span>
           <span class="event-day">{{ e.date | date: "%-d" }}</span>
+          <span class="event-month">{{ e.date | date: "%b" }}</span>
         </div>
         <div class="event-body">
-          <h3>{{ e.title }}</h3>
+          <h3 class="event-title">{{ e.title }}</h3>
           <div class="event-meta">
-            <span class="event-date">
+            <span>
               {{ e.date | date: "%A, %B %-d, %Y" }}
-              {% if e.end_date %}to {{ e.end_date | date: "%B %-d, %Y" }}{% endif %}
+              {%- if e.end_date %} to {{ e.end_date | date: "%B %-d, %Y" }}{% endif -%}
             </span>
             {% if e.time %}<span>{{ e.time }}</span>{% endif %}
-            {% if e.venue %}<span class="pin">{{ e.venue }}{% if e.neighborhood %}, {{ e.neighborhood }}{% endif %}</span>
-            {% elsif e.neighborhood %}<span class="pin">{{ e.neighborhood }}</span>{% endif %}
-            {% if e.price %}<span class="event-price">{{ e.price }}</span>{% endif %}
+            {% if e.venue %}<span>{{ e.venue }}{% if e.neighborhood %}, {{ e.neighborhood }}{% endif %}</span>
+            {% elsif e.neighborhood %}<span>{{ e.neighborhood }}</span>{% endif %}
+            {% if e.price %}<span>{{ e.price }}</span>{% endif %}
+            {% if e.host %}<span>Presented by {{ e.host }}</span>{% endif %}
           </div>
-          {% if e.host %}<div class="event-host">Presented by {{ e.host }}</div>{% endif %}
           {% assign blurb = e.content | strip_html | strip %}
-          {% if blurb != "" %}<p class="blurb">{{ blurb | truncate: 240 }}</p>{% endif %}
+          {% if blurb != "" %}<p class="blurb">{{ blurb }}</p>{% endif %}
           {% if e.link %}
-            <div class="links"><a href="{{ e.link }}" target="_blank" rel="noopener">Details and tickets ↗</a></div>
+            <div class="links">
+              <a href="{{ e.link }}" target="_blank" rel="noopener">Details and tickets<i class="arr"></i></a>
+            </div>
           {% endif %}
         </div>
       </article>
     {% endif %}
   {% endfor %}
 {% endcapture %}
-{% assign has_events = event_cards | strip %}
+{% assign has_events = event_rows | strip %}
 
 {% if has_events != "" %}
-<section class="events" id="events" aria-labelledby="events-heading">
-  <h2 id="events-heading" class="section-head">Upcoming events</h2>
-  <div class="event-list">{{ event_cards }}</div>
+<section class="section band s-alta" id="events" aria-labelledby="events-heading">
+  <div class="wrap">
+    <h2 id="events-heading" class="section-head">Upcoming events</h2>
+    <div class="event-list">{{ event_rows }}</div>
+  </div>
 </section>
 {% endif %}
 
 {% assign artists = site.artists | sort: 'name' %}
 
-<h2 class="section-head" id="directory">Teachers and artists</h2>
+{%- comment -%}
+  Neighboring sections must differ in ground. With no events the hero sits
+  directly above this one, so this section takes the band instead.
+{%- endcomment -%}
+<section class="section s-indigo{% if has_events == "" %} band{% endif %}" id="directory">
+  <div class="wrap">
+    <h2 class="section-head">Teachers and artists</h2>
 
-<div class="filters" role="region" aria-label="Filter by neighborhood">
-  <span class="label">Filter:</span>
-  <button class="filter-btn" data-filter="all" aria-pressed="true">All</button>
-  {% assign present = artists | map: 'neighborhood' | uniq | sort %}
-  {% for hood in site.neighborhoods %}
-    {% if present contains hood %}
-      <button class="filter-btn" data-filter="{{ hood | slugify }}" aria-pressed="false">{{ hood }}</button>
-    {% endif %}
-  {% endfor %}
-  {% for hood in present %}
-    {% unless site.neighborhoods contains hood %}
-      <button class="filter-btn" data-filter="{{ hood | slugify }}" aria-pressed="false">{{ hood }}</button>
-    {% endunless %}
-  {% endfor %}
-  <span class="count" id="result-count">{{ artists | size }} listings</span>
-</div>
+    <div class="filters" role="region" aria-label="Filter by neighborhood">
+      <span class="label">Filter</span>
+      <button class="filter-btn" data-filter="all" aria-pressed="true">All</button>
+      {% assign present = artists | map: 'neighborhood' | uniq | sort %}
+      {% for hood in site.neighborhoods %}
+        {% if present contains hood %}
+          <button class="filter-btn" data-filter="{{ hood | slugify }}" aria-pressed="false">{{ hood }}</button>
+        {% endif %}
+      {% endfor %}
+      {% for hood in present %}
+        {% unless site.neighborhoods contains hood %}
+          <button class="filter-btn" data-filter="{{ hood | slugify }}" aria-pressed="false">{{ hood }}</button>
+        {% endunless %}
+      {% endfor %}
+      <span class="count" id="result-count">{{ artists | size }} listings</span>
+    </div>
 
-<section class="grid" id="artist-grid">
-  {% for artist in artists %}
-    <article class="card" data-neighborhood="{{ artist.neighborhood | slugify }}">
-      <div class="card-head">
-        <div class="avatar" aria-hidden="true">{{ artist.name | slice: 0, 1 | upcase }}</div>
-        <div>
-          <h3>{{ artist.name }}</h3>
-          <div class="meta">
-            <span class="pin">{{ artist.neighborhood }}</span>
+    <div class="grid" id="artist-grid">
+      {% for artist in artists %}
+        <article class="card" data-neighborhood="{{ artist.neighborhood | slugify }}">
+          <div class="card-plate"><h3>{{ artist.name }}</h3></div>
+          <div class="hood">{{ artist.neighborhood }}</div>
+          <p class="blurb">{{ artist.content | strip_html | strip }}</p>
+          {% if artist.tags and artist.tags.size > 0 %}
+            <div class="tags">{{ artist.tags | join: " · " }}</div>
+          {% endif %}
+          <div class="links">
+            {% if artist.website %}<a href="{{ artist.website }}" target="_blank" rel="noopener">Website<i class="arr"></i></a>{% endif %}
+            {% if artist.instagram %}<a href="https://instagram.com/{{ artist.instagram | remove: '@' }}" target="_blank" rel="noopener">Instagram<i class="arr"></i></a>{% endif %}
+            {% if artist.youtube %}<a href="{{ artist.youtube }}" target="_blank" rel="noopener">YouTube<i class="arr"></i></a>{% endif %}
           </div>
-        </div>
-      </div>
-      <div class="badges">
-        {% if artist.teaches %}<span class="badge teaches">Teaches</span>{% endif %}
-        {% for tag in artist.tags %}<span class="badge">{{ tag }}</span>{% endfor %}
-      </div>
-      <p class="blurb">{{ artist.content | strip_html | strip | truncate: 280 }}</p>
-      <div class="links">
-        {% if artist.website %}<a href="{{ artist.website }}" target="_blank" rel="noopener">Website ↗</a>{% endif %}
-        {% if artist.instagram %}<a href="https://instagram.com/{{ artist.instagram | remove: '@' }}" target="_blank" rel="noopener">Instagram ↗</a>{% endif %}
-        {% if artist.youtube %}<a href="{{ artist.youtube }}" target="_blank" rel="noopener">YouTube ↗</a>{% endif %}
-      </div>
-    </article>
-  {% endfor %}
-</section>
+        </article>
+      {% endfor %}
+    </div>
 
-<div class="no-results" id="no-results">No artists are listed in that area yet. Select another neighborhood, or <a href="{{ '/submit/' | relative_url }}">add one</a>.</div>
+    <div class="no-results" id="no-results">No artists are listed in that area yet. Select another neighborhood, or <a href="{{ '/submit/' | relative_url }}">add one</a>.</div>
+  </div>
+</section>
 
 <script>
 (function () {
@@ -127,7 +130,7 @@ title: "Kathak Vancouver: a directory of Kathak artists and teachers in the Lowe
       if (match) visible++;
     });
     noResults.classList.toggle('show', visible === 0);
-    count.textContent = visible + (visible === 1 ? ' listing' : ' listings') + (value === 'all' ? '' : ' · of ' + total);
+    count.textContent = visible + (visible === 1 ? ' listing' : ' listings') + (value === 'all' ? '' : ' of ' + total);
   }
 
   buttons.forEach(function (btn) {

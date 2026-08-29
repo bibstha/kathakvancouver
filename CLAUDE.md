@@ -11,7 +11,11 @@ Lower Mainland of British Columbia.
 - **Data:** one markdown file per artist in `_artists/`. One per event in
   `_events/`. Both are Jekyll collections.
 - **Filter:** vanilla JS, toggling `data-neighborhood` on cards (no framework)
-- **Styling:** plain CSS in `assets/css/main.css` (Playfair Display + Inter)
+- **Styling:** plain CSS in `assets/css/main.css`, one typeface (Schibsted
+  Grotesk). The design system is documented in `docs/styleguide.md`. Read that
+  file before you change color, type, spacing, or shape. It carries the rules
+  and the reasons, including why brass has two tokens and why the heading
+  reveal does not use `transition-delay`.
 - **Hosting:** GitHub Pages, built and deployed by GitHub Actions
 - **Domain:** `kathakvancouver.com`, DNS on Cloudflare
 
@@ -28,6 +32,8 @@ about.md                # /about/
 submit.md               # /submit/
 assets/css/main.css     # all styling
 assets/favicon.svg
+docs/styleguide.md      # the design system, and how it was derived
+docs/styleguide-preview.html  # live specimen of the system. Not published.
 CNAME                   # the custom domain, copied into _site/ by Jekyll
 .github/workflows/pages.yml  # build and deploy, plus the daily rebuild
 mise.toml               # ruby 4.0.6
@@ -46,8 +52,10 @@ neighborhood: Surrey            # must match a label in _config.yml `neighborhoo
 website: https://example.com    # optional
 instagram: their_handle         # optional, no @
 youtube: https://...            # optional
-teaches: true                   # shows the green "Teaches" badge
-tags:                           # optional badges
+teaches: true                   # data only. The card no longer renders a badge,
+                                # because every listing sets it.
+tags:                           # optional. Rendered as one quiet meta line,
+                                # joined by " · ", not as a row of pills.
   - Lucknow Gharana
   - Kids classes
 ---
