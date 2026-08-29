@@ -1,0 +1,51 @@
+name: Build and deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    # 15:00 UTC is 08:00 in Vancouver during summer time, 07:00 in winter.
+    # The daily run makes past events drop off the homepage. Liquid computes
+    # the cutoff at build time, so the site must rebuild every day.
+    - cron: "0 15 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "4.0.6"
+          bundler-cache: true
+
+      - uses: actions/configure-pages@v5
+
+      - run: bundle exec jekyll build --destination ./_site
+        env:
+          JEKYLL_ENV: production
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./_site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
