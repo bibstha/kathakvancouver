@@ -29,8 +29,10 @@ the contact channels that the artist already shares in public.
 
 ## Who runs this site
 
-Bibek Shrestha maintains this site. The site is independent of every school and
-institution. It is a community resource.
+Volunteers from the Kathak community run this site. A listing is free.
+
+Anyone can add an entry. Artists, teachers, students, and parents send us
+listings and corrections.
 
 ## Updates and corrections
 
