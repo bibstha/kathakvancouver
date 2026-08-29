@@ -38,7 +38,7 @@ title: "Kathak Vancouver: a directory of Kathak artists and teachers in the Lowe
           {%- assign b = '/assets/events/' | append: e.image | relative_url -%}
           <img src="{{ b }}-600.jpg"
                srcset="{{ b }}-400.jpg 400w, {{ b }}-600.jpg 600w, {{ b }}-900.jpg 900w"
-               sizes="(max-width: 640px) 128px, 240px"
+               sizes="(max-width: 640px) 100vw, 240px"
                alt="{{ e.title }}" width="900" height="675" loading="lazy" decoding="async">
           <span class="event-day">{{ e.date | date: "%-d" }}</span>
           <span class="event-month">{{ e.date | date: "%b" }}</span>

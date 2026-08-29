@@ -7,7 +7,10 @@
 
 --fit   centre-crop to 4:3.
 --crop  crop to the given box first. The box must already be 4:3.
---pad   contain the image on a white ground. For a logo.
+--pad   contain the image on a flat ground. For a logo, or for a poster whose
+        shape does not fit the plate. --pad-bg sets the ground, white by
+        default. Give a poster its own dark ground, so the date gradient that
+        the event tile paints on top has something to sit on.
 
 The output is slug-400.jpg, slug-600.jpg and slug-900.jpg. The widths follow
 the plate: a card is at most 340 CSS px wide and an event tile is 240, so 600
@@ -28,9 +31,11 @@ def main():
     g.add_argument("--crop", help="x0,y0,x1,y1")
     g.add_argument("--pad", action="store_true")
     ap.add_argument("--focus", default="0.5,0.5", help="--fit centring, 0-1")
+    ap.add_argument("--pad-bg", default="ffffff", help="--pad ground, hex")
     a = ap.parse_args()
 
     im = Image.open(a.source).convert("RGB")
+    bg = tuple(int(a.pad_bg[i:i + 2], 16) for i in (0, 2, 4))
     if a.crop:
         im = im.crop(tuple(int(v) for v in a.crop.split(",")))
     elif a.pad:
@@ -45,7 +50,7 @@ def main():
         if a.pad:
             tile = im.copy()
             tile.thumbnail((round(w * 0.86), round(h * 0.86)), Image.LANCZOS)
-            out = Image.new("RGB", (w, h), (255, 255, 255))
+            out = Image.new("RGB", (w, h), bg)
             out.paste(tile, ((w - tile.width) // 2, (h - tile.height) // 2))
         elif a.crop:
             out = im.resize((w, h), Image.LANCZOS)

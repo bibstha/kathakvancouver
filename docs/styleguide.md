@@ -385,7 +385,7 @@ Two alternates, both verified on Google Fonts, are **Familjen Grotesk** and
 
 | Role | Size | Line height | Weight | Letter spacing |
 |---|---|---|---|---|
-| Display | `clamp(2.75rem, 6vw, 4rem)` | `1.05` | 500 | `-0.02em` |
+| Display | `clamp(2rem, 6vw, 4rem)` | `1.05` | 500 | `-0.02em` |
 | Section head | `clamp(1.75rem, 3.5vw, 2.5rem)` | `1.10` | 400 | `-0.01em` |
 | Card title | `1.375rem` | `1.20` | 500 | `-0.01em` |
 | Row title | `1.0625rem` | `1.25` | 600 | normal |
@@ -511,6 +511,11 @@ does not. Delete the badge row.
 
 Rows, not cards. The site rarely has more than three events.
 
+Below 640px the row stacks. The plate goes full width, and the body follows
+under it. A 128px tile beside a tall body leaves an empty column under the
+image and squeezes the blurb to about 200px. The stacked row matches the
+artist card, which is already one full-width plate above its text.
+
 ### 4.8 Motion
 
 Split every section heading into words and fade each word up with a stagger
@@ -623,7 +628,7 @@ The widths come from the plates, not from a habit:
 | Card, wide screen | 336 | 400 | 900 | 900 |
 | Card, one column | ~331 | 400 | 900 | 900 |
 | Event tile, wide screen | 240 | 400 | 600 | 900 |
-| Event tile, narrow | 128 | 400 | 400 | 400 |
+| Event tile, narrow | ~350 | 400 | 900 | 900 |
 
 The rule behind the table: a plate is small and fixed, so the file must be
 small and fixed too. A 240 pixel tile served a 1000 pixel file wastes about

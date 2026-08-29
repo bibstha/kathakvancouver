@@ -96,10 +96,10 @@ the centre is the wrong place to cut. `--pad` contains a logo on a white
 ground. Each run writes `slug-400.jpg`, `slug-600.jpg` and `slug-900.jpg`.
 
 Never hand a full-resolution file to the page. A card plate is at most 340 CSS
-pixels wide and an event tile is 240, so the `srcset` in `index.html` lets the
-browser take 400 on a plain screen, 600 for the event tile on a 2x screen, and
-900 for a card on a 2x screen. Add a width to `WIDTHS` and to both `srcset`
-attributes together, or not at all.
+pixels wide. An event tile is 240 on a wide screen, and full width below 640px,
+where the row stacks. The `srcset` in `index.html` lets the browser take 400 on
+a plain screen and 900 on a 2x screen. Add a width to `WIDTHS` and to both
+`srcset` attributes together, or not at all.
 
 Two rules govern what goes in:
 
@@ -214,6 +214,7 @@ days. If events stop expiring, look at this first.
 |---|---|
 | `kathakvancouver.com` | 4 A records and 4 AAAA records to GitHub Pages. DNS-only in Cloudflare. |
 | `www.kathakvancouver.com` | CNAME to `bibstha.github.io`, proxied by Cloudflare. |
+| `vancouverkathak.com` | Its own Cloudflare zone. Apex and `www` are A records to `192.0.2.1`, proxied. |
 
 GitHub issues the Let's Encrypt certificate for the apex, and `CNAME` in the
 repository root declares the domain. The apex is deliberately not proxied.
@@ -224,6 +225,14 @@ The certificate covers the apex only. A Cloudflare Redirect Rule answers `www`
 at the edge with a 301 to the apex, so `www` never reaches GitHub. That rule
 lives in the `http_request_dynamic_redirect` phase on the zone. The Cloudflare
 token in `.env.local` needs DNS Edit and Single Redirect Edit.
+
+`vancouverkathak.com` is a second domain that redirects to this one. It is a
+separate Cloudflare zone with no origin. The apex and `www` are proxied A
+records to `192.0.2.1`, an address that carries no traffic. A Redirect Rule in
+the `http_request_dynamic_redirect` phase of that zone answers both hostnames
+with a 301 to `https://kathakvancouver.com`, and keeps the path and the query
+string. The request never leaves the Cloudflare edge, so the site needs no
+`CNAME` entry and no second certificate.
 
 ## Editorial principles
 
