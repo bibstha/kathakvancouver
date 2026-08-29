@@ -4,6 +4,7 @@ neighborhood: Vancouver
 website: https://www.facebook.com/theitaaldanceacademy/
 instagram:
 teaches: true
+image: theitaal-dance-academy
 tags:
   - Bharatanatyam
   - Workshops

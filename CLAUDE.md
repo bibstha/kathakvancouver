@@ -120,7 +120,7 @@ motif a fill color of its own.
 A card with no photograph picks its motif by position in the grid, so no two
 neighbors repeat. An event picks by day of month, so its motif never changes.
 
-Listings that still need a photograph: Amika Kushwaha, TheiTaal Dance Academy.
+Amika Kushwaha is the one listing that still needs a photograph.
 
 ### Adding an event
 

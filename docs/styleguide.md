@@ -555,20 +555,31 @@ Three options were on the table:
 2. Use one full-bleed hero photograph and keep the cards text-only.
 3. Keep the site text-only and drop the image slots.
 
-The answer is 1 plus a fallback. Three of the seven listings now carry a real
-image, taken from the website of the artist with permission. The other four
-carry a motif (4.10) until a photograph arrives. The plate is the same shape
+The answer is 1 plus a fallback. Six of the seven listings now carry a real
+image, published with the permission of the artist or the school. The last one
+carries a motif (4.10) until a photograph arrives. The plate is the same shape
 in both cases, so the grid holds one rhythm while the collection fills in.
 
 Two rules stand. A photograph on a public website is not a license to
 republish it, so ask first. Name the photographer when the name is known.
 
-A survey of the seven listings found the real constraint. Two artists have no
-website at all. Two are on Facebook only, behind a login. One school publishes
-a gallery, but every frame is a promotional flyer with a phone number and a QR
-code across it. Only two listings had a clean photograph, and one more had a
-usable logo. A design that assumed photographs would have failed on more than
-half the grid. This is why the fallback is part of the system and not a patch.
+A survey of the seven listings found the real constraint. Only two listings
+published a clean photograph. Two artists had no website at all. Two were on
+Facebook only, behind a login. One school published a gallery of nineteen
+frames, and every frame was a promotional flyer with a phone number and a QR
+code across it. The other four images arrived by hand, from people the
+maintainer meets.
+
+A promotional banner is not a card image. Both banners offered here carried a
+phone number, an email address, and a call-to-action button. A 4:3 crop of one
+leaves a truncated phone number printed across the card. Crop the photograph
+out of the banner, or use the logo, but never publish the banner whole. The
+TheiTaal card is a crop of the one dancer in their banner who had no text over
+her.
+
+This is why the fallback is part of the system and not a patch. A grid that
+assumed photographs would have failed on more than half of its cards on the
+day it shipped.
 
 ### 4.10 Motifs
 
