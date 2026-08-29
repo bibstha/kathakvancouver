@@ -145,8 +145,16 @@ image: 2026-09-14-recital       # optional, a set in assets/events/
 credit: Photographer Name       # optional, shown under the event
 ---
 
-Two or three factual sentences.
+Four to eight factual sentences. Give the reader the detail that the poster
+and the box office carry: who dances, who plays, who composed and directed the
+work, the running time, the street address, and every way to book. Research
+the artists outside the source post and name their training and their gurus.
 ```
+
+An event may carry a phone number when the poster or the box office prints one
+for booking. That number is published for the event, so it is not a personal
+contact. The rule against personal phone numbers still holds for an artist
+listing in `_artists/`.
 
 **Do not name the link field `url`.** Jekyll defines `url` on every document.
 A front matter `url:` is ignored, and the rendered link points to a
@@ -237,7 +245,9 @@ string. The request never leaves the Cloudflare edge, so the site needs no
 ## Editorial principles
 
 - **Public information only** — websites, public Instagram, neighborhood-level
-  location. Never home addresses or personal phone numbers.
+  location. Never home addresses. Never a personal phone number in an artist
+  listing. An event may carry the booking number that its poster or its box
+  office prints, because that number is published to sell tickets.
 - **Free** — no ads, no marketplace, no payment.
 - **Removal on request** — anyone listed can ask to be edited or removed at
   `hello@kathakvancouver.com` (see `/submit/`).
