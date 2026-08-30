@@ -501,20 +501,39 @@ the same height and sit on the same baseline.
 Keep at most one badge per card, and only when it says something the blurb
 does not. Delete the badge row.
 
-**Event row**
+**Event card**
 
-1. Date block. Day number at `2rem` weight 500. Month at meta size, uppercase.
-2. Title, row title size
-3. Venue and price, meta size, `--ink-muted`
-4. `Details and tickets` link with a long arrow
-5. Hairline `--line` under the row
+1. Plate, 4:3, `--r-flat`. It holds the poster or the photograph, and a motif
+   when the event has neither. The day number sits on it at `2rem` weight 500,
+   the month under that at meta size, uppercase. Over a photograph the two sit
+   on a dark gradient in white.
+2. Title, card title size, section accent, linked to the event page
+3. Date and time, venue and neighborhood, and price. One line each, meta size,
+   `--ink-muted`
+4. `Read more` and `Tickets`, each with a long arrow
 
-Rows, not cards. The site rarely has more than three events.
+The event card and the artist card share one grid, one plate, one title size
+and one link row. The card was a row until August 2026. The row carried the
+whole blurb, and the blurb grew to about 170 words once each event took the
+full detail from its poster and its box office. That is too much text for a
+homepage. The card now carries what a reader scans, and the event page carries
+what a reader reads.
 
-Below 640px the row stacks. The plate goes full width, and the body follows
-under it. A 128px tile beside a tall body leaves an empty column under the
-image and squeezes the blurb to about 200px. The stacked row matches the
-artist card, which is already one full-width plate above its text.
+The card is not a link as a whole. The title and the two links are the click
+targets, so `Tickets` can leave the site while `Read more` stays on it.
+
+**Event page**
+
+One page per event, at `/events/<slug>/`. It is a prose page, so it leads with
+the title, not with the plate.
+
+1. Title, display size
+2. The same meta lines as the card, plus the host
+3. Plate, 4:3, capped at 440px. A 4:3 plate at the full `68ch` column is
+   480px tall and pushes the first sentence off the screen.
+4. The blurb, body size, in the `68ch` column
+5. `Details and tickets` and `All upcoming events`
+6. The photograph credit, when the event names one
 
 ### 4.8 Motion
 
@@ -627,12 +646,12 @@ The widths come from the plates, not from a habit:
 |---|---|---|---|---|
 | Card, wide screen | 336 | 400 | 900 | 900 |
 | Card, one column | ~331 | 400 | 900 | 900 |
-| Event tile, wide screen | 240 | 400 | 600 | 900 |
-| Event tile, narrow | ~350 | 400 | 900 | 900 |
+| Event card, wide screen | 336 | 400 | 900 | 900 |
+| Event page plate | 440 | 600 | 900 | 900 |
 
 The rule behind the table: a plate is small and fixed, so the file must be
-small and fixed too. A 240 pixel tile served a 1000 pixel file wastes about
-four fifths of the bytes it downloads, and no viewer ever sees the difference.
+small and fixed too. A 336 pixel plate served a 1000 pixel file wastes about
+two thirds of the bytes it downloads, and no viewer ever sees the difference.
 Measure the plate first, then pick the widths.
 
 Give every `img` a `width`, a `height`, `loading="lazy"` and

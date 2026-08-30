@@ -7,7 +7,7 @@ neighborhood: Burnaby
 host: Indian Classical Music Society of Vancouver
 link: https://www.icmsv.org/palak-dhiman-salon-series.html
 price: "$21"
-image: 2026-09-10-salon-series-palak-dhiman
+image: /assets/events/2026-09-10-salon-series-palak-dhiman-900.jpg
 credit: Eliseo Santillan
 ---
 

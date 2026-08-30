@@ -1,0 +1,51 @@
+---
+layout: default
+---
+{%- comment -%}
+  One page per event. The homepage card carries the plate, the title and the
+  meta line. The full detail from the poster and the box office lives here.
+  A card with no photograph picks its motif by day of month, so the page and
+  the card show the same figure.
+{%- endcomment -%}
+{% assign motifs = "chakkar,ghungroo,teentaal,tatkar,chakradar" | split: "," %}
+<div class="section s-alta">
+  <div class="wrap">
+    <article class="page event-page">
+      <h1>{{ page.title }}</h1>
+
+      <div class="event-meta">
+        <span>
+          {{ page.date | date: "%A, %B %-d, %Y" }}
+          {%- if page.end_date %} to {{ page.end_date | date: "%A, %B %-d, %Y" }}{% endif -%}
+          {%- if page.time %} · {{ page.time }}{% endif -%}
+        </span>
+        {% if page.venue %}<span>{{ page.venue }}{% if page.neighborhood %}, {{ page.neighborhood }}{% endif %}</span>
+        {% elsif page.neighborhood %}<span>{{ page.neighborhood }}</span>{% endif %}
+        {% if page.price %}<span>{{ page.price }}</span>{% endif %}
+        {% if page.host %}<span>Presented by {{ page.host }}</span>{% endif %}
+      </div>
+
+      {%- if page.image -%}
+      <div class="card-plate">
+        {%- assign b = page.image | remove: '-900.jpg' | relative_url -%}
+        <img src="{{ b }}-600.jpg"
+             srcset="{{ b }}-400.jpg 400w, {{ b }}-600.jpg 600w, {{ b }}-900.jpg 900w"
+             sizes="(max-width: 519px) 90vw, 440px"
+             alt="{{ page.title }}" width="900" height="675" loading="lazy" decoding="async">
+      </div>
+      {%- else -%}
+      {% assign mi = page.date | date: "%-d" | modulo: 5 %}
+      <div class="card-plate plate" style="--motif: url('{{ "/assets/motifs/" | append: motifs[mi] | append: ".svg" | relative_url }}')"></div>
+      {%- endif -%}
+
+      {{ content }}
+
+      <div class="links">
+        {% if page.link %}<a href="{{ page.link }}" target="_blank" rel="noopener">Details and tickets<i class="arr"></i></a>{% endif %}
+        <a href="{{ '/#events' | relative_url }}">All upcoming events<i class="arr"></i></a>
+      </div>
+
+      {% if page.credit %}<p class="credit">Photo: {{ page.credit }}</p>{% endif %}
+    </article>
+  </div>
+</div>

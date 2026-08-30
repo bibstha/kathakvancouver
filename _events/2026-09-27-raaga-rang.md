@@ -7,7 +7,7 @@ neighborhood: Surrey
 host: KVP Heritage Society
 link: https://purchase.surrey.ca/EventAvailability?EventId=26801
 price: "$28.75, $38.75, and $53.75"
-image: 2026-09-27-raaga-rang
+image: /assets/events/2026-09-27-raaga-rang-900.jpg
 ---
 
 KVP Heritage Society presents an evening of classical Kathak with a live

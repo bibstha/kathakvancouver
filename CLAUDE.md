@@ -23,7 +23,7 @@ Lower Mainland of British Columbia.
 
 ```
 _artists/*.md           # one card per file
-_events/*.md            # one event card per file. Can be absent.
+_events/*.md            # one event per file. Card and page. Can be absent.
 assets/artists/*.jpg    # one photograph or logo per listing, in 3 widths
 assets/events/*.jpg     # one photograph per event, in 3 widths
 assets/motifs/*.svg     # five abstract Kathak figures, the fallback graphic
@@ -31,6 +31,7 @@ tools/make-image.py     # builds the 3 widths from one source file
 _config.yml             # neighborhoods filter order, timezone, site metadata
 _layouts/default.html   # site shell (header, nav, footer)
 _layouts/page.html      # for /about and /submit
+_layouts/event.html     # one page per event, at /events/<slug>/
 index.html              # homepage: events, then artist grid and filter
 about.md                # /about/
 submit.md               # /submit/
@@ -94,18 +95,18 @@ tools/make-image.py ~/logo.jpg  assets/artists/artist-slug --pad
 the centre is the wrong place to cut. `--pad` contains a logo on a white
 ground. Each run writes `slug-400.jpg`, `slug-600.jpg` and `slug-900.jpg`.
 
-Never hand a full-resolution file to the page. A card plate is at most 340 CSS
-pixels wide. An event tile is 240 on a wide screen, and full width below 640px,
-where the row stacks. The `srcset` in `index.html` lets the browser take 400 on
-a plain screen and 900 on a 2x screen. Add a width to `WIDTHS` and to both
-`srcset` attributes together, or not at all.
+Never hand a full-resolution file to the page. Every card plate, artist and
+event, is at most 340 CSS pixels wide, and full width below 700px. The plate on
+an event page is capped at 440. The `srcset` attributes let the browser take
+400 on a plain screen and 900 on a 2x screen. Add a width to `WIDTHS` and to
+every `srcset` together, or not at all.
 
 Two rules govern what goes in:
 
 1. Ask the artist before you publish a photograph of them. A photograph on a
    public website is not a license to republish it.
-2. Name the photographer in `credit:` when you know the name. The event row
-   renders it as one quiet line. A logo needs no credit.
+2. Name the photographer in `credit:` when you know the name. The event page
+   renders it as one quiet line under the links. A logo needs no credit.
 
 A school with no performance photograph can use its logo. `--pad` trims the
 border and centres the logo on white, so it fills the same plate as a
@@ -120,7 +121,8 @@ therefore takes `--accent` and changes color with its section. Do not give a
 motif a fill color of its own.
 
 A card with no photograph picks its motif by position in the grid, so no two
-neighbors repeat. An event picks by day of month, so its motif never changes.
+neighbors repeat. An event picks by day of month, so the card and the event
+page show the same figure, and it never changes.
 
 Amika Kushwaha is the one listing that still needs a photograph.
 
@@ -140,8 +142,14 @@ neighborhood: Surrey            # display only. Events have no filter.
 host: Example Academy           # optional
 link: https://example.com/tick  # optional, tickets or info
 price: "$25"                    # optional, "Free" is fine
-image: 2026-09-14-recital       # optional, a set in assets/events/
-credit: Photographer Name       # optional, shown under the event
+image: /assets/events/2026-09-14-recital-900.jpg
+                                # optional. The path of the 900 file, not the
+                                # slug that an artist uses. jekyll-seo-tag
+                                # publishes this value as og:image on the event
+                                # page, so it must be a real path. The Liquid
+                                # strips "-900.jpg" to get the base that names
+                                # all three widths.
+credit: Photographer Name       # optional, shown on the event page
 ---
 
 Four to eight factual sentences. Give the reader the detail that the poster
@@ -150,14 +158,26 @@ work, the running time, the street address, and every way to book. Research
 the artists outside the source post and name their training and their gurus.
 ```
 
+Every event gets two views. The homepage shows a card in the same grid as the
+artists: the plate with the date on it, the title, the date and venue and
+price, and two links. The blurb does not fit a card, so it lives on the event
+page that `_layouts/event.html` builds at `/events/<slug>/`. `Read more` opens
+that page. `Tickets` goes straight to `link`.
+
+`future: true` in `_config.yml` is what makes the event pages build. Jekyll
+hides a document dated in the future, and every upcoming event is dated in the
+future. Without the setting the cards still render and every `Read more` gives
+a 404.
+
 An event may carry a phone number when the poster or the box office prints one
 for booking. That number is published for the event, so it is not a personal
 contact. The rule against personal phone numbers still holds for an artist
 listing in `_artists/`.
 
-**Do not name the link field `url`.** Jekyll defines `url` on every document.
-A front matter `url:` is ignored, and the rendered link points to a
-`/events/<slug>/` page that does not exist. The field is `link` for this reason.
+**Do not name the link field `url`.** Jekyll defines `url` on every document,
+and for an event that is the path of its own page. A front matter `url:` is
+ignored, so a ticket link under that name would send the reader back to the
+event page. The field is `link` for this reason.
 
 Events sort by `date`, ascending. An event stays in the list for the whole of
 its last day. The last day is `end_date`, or `date` when there is no `end_date`.

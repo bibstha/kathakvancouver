@@ -17,7 +17,9 @@ title: "Kathak Vancouver: a directory of Kathak artists and teachers in the Lowe
   Upcoming events. Liquid computes the cutoff at build time, so the site must
   rebuild every day for past events to drop off. See CLAUDE.md "Nightly rebuild".
   An event stays in the list for the whole of its last day (end_date, or date).
-  The rows are captured first, so the section can hide when nothing is upcoming.
+  The cards are captured first, so the section can hide when nothing is upcoming.
+  The card carries the plate, the title and the meta line. The full detail sits
+  on the event page, which _layouts/event.html builds.
 {%- endcomment -%}
 {%- comment -%}
   A listing with no photograph falls back to one of five abstract Kathak
@@ -27,18 +29,23 @@ title: "Kathak Vancouver: a directory of Kathak artists and teachers in the Lowe
 {% assign motifs = "chakkar,ghungroo,teentaal,tatkar,chakradar" | split: "," %}
 
 {% assign today = site.time | date: "%Y-%m-%d" %}
-{% capture event_rows %}
+{% capture event_cards %}
   {% assign sorted_events = site.events | sort: 'date' %}
   {% for e in sorted_events %}
     {% assign until = e.end_date | default: e.date | date: "%Y-%m-%d" %}
     {% if until >= today %}
-      <article class="event-row">
+      <article class="card event-card">
         {%- if e.image -%}
         <div class="event-when has-photo">
-          {%- assign b = '/assets/events/' | append: e.image | relative_url -%}
+          {%- comment -%}
+            e.image is the path of the 900 file, because jekyll-seo-tag
+            publishes it as og:image on the event page. Strip the width to
+            get the base that names all three files.
+          {%- endcomment -%}
+          {%- assign b = e.image | remove: '-900.jpg' | relative_url -%}
           <img src="{{ b }}-600.jpg"
                srcset="{{ b }}-400.jpg 400w, {{ b }}-600.jpg 600w, {{ b }}-900.jpg 900w"
-               sizes="(max-width: 640px) 100vw, 240px"
+               sizes="(max-width: 699px) 90vw, 340px"
                alt="{{ e.title }}" width="900" height="675" loading="lazy" decoding="async">
           <span class="event-day">{{ e.date | date: "%-d" }}</span>
           <span class="event-month">{{ e.date | date: "%b" }}</span>
@@ -50,39 +57,32 @@ title: "Kathak Vancouver: a directory of Kathak artists and teachers in the Lowe
           <span class="event-month">{{ e.date | date: "%b" }}</span>
         </div>
         {%- endif -%}
-        <div class="event-body">
-          <h3 class="event-title">{{ e.title }}</h3>
-          <div class="event-meta">
-            <span>
-              {{ e.date | date: "%A, %B %-d, %Y" }}
-              {%- if e.end_date %} to {{ e.end_date | date: "%B %-d, %Y" }}{% endif -%}
-            </span>
-            {% if e.time %}<span>{{ e.time }}</span>{% endif %}
-            {% if e.venue %}<span>{{ e.venue }}{% if e.neighborhood %}, {{ e.neighborhood }}{% endif %}</span>
-            {% elsif e.neighborhood %}<span>{{ e.neighborhood }}</span>{% endif %}
-            {% if e.price %}<span>{{ e.price }}</span>{% endif %}
-            {% if e.host %}<span>Presented by {{ e.host }}</span>{% endif %}
-          </div>
-          {% assign blurb = e.content | strip_html | strip %}
-          {% if blurb != "" %}<p class="blurb">{{ blurb }}</p>{% endif %}
-          {% if e.link %}
-            <div class="links">
-              <a href="{{ e.link }}" target="_blank" rel="noopener">Details and tickets<i class="arr"></i></a>
-            </div>
-          {% endif %}
-          {% if e.credit %}<p class="credit">Photo: {{ e.credit }}</p>{% endif %}
+        <h3 class="card-name"><a href="{{ e.url | relative_url }}">{{ e.title }}</a></h3>
+        <div class="event-meta">
+          <span>
+            {{ e.date | date: "%A, %B %-d" }}
+            {%- if e.end_date %} to {{ e.end_date | date: "%B %-d" }}{% endif -%}
+            {%- if e.time %} · {{ e.time }}{% endif -%}
+          </span>
+          {% if e.venue %}<span>{{ e.venue }}{% if e.neighborhood %}, {{ e.neighborhood }}{% endif %}</span>
+          {% elsif e.neighborhood %}<span>{{ e.neighborhood }}</span>{% endif %}
+          {% if e.price %}<span>{{ e.price }}</span>{% endif %}
+        </div>
+        <div class="links">
+          <a href="{{ e.url | relative_url }}">Read more<i class="arr"></i></a>
+          {% if e.link %}<a href="{{ e.link }}" target="_blank" rel="noopener">Tickets<i class="arr"></i></a>{% endif %}
         </div>
       </article>
     {% endif %}
   {% endfor %}
 {% endcapture %}
-{% assign has_events = event_rows | strip %}
+{% assign has_events = event_cards | strip %}
 
 {% if has_events != "" %}
 <section class="section band s-alta" id="events" aria-labelledby="events-heading">
   <div class="wrap">
     <h2 id="events-heading" class="section-head">Upcoming events</h2>
-    <div class="event-list">{{ event_rows }}</div>
+    <div class="grid">{{ event_cards }}</div>
   </div>
 </section>
 {% endif %}

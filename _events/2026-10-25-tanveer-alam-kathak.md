@@ -7,7 +7,7 @@ neighborhood: Vancouver
 host: Mandala Arts and Culture Society
 link: https://www.zeffy.com/en-CA/ticketing/mandala-arts-and-culture-society-in-partnership-with-roundhouse-cc-presents-meera-sreenarayanan-bharata-natyam-and-tanveer-alam-kathak
 price: "$25, or $22 for seniors, students, and members"
-image: 2026-10-25-tanveer-alam-kathak
+image: /assets/events/2026-10-25-tanveer-alam-kathak-900.jpg
 credit: Srivatsa Shandilya and One Frame Story Photography. Poster by little bird creative.
 ---
 

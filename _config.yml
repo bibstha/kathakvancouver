@@ -9,6 +9,9 @@ baseurl: ""
 lang: en
 # site.time drives the upcoming/past cutoff on the homepage. Keep it local.
 timezone: America/Vancouver
+# An event document carries a date in the future. Jekyll hides a future-dated
+# document unless future is true, so the event pages need this to build.
+future: true
 
 permalink: /:slug/
 
@@ -16,7 +19,8 @@ collections:
   artists:
     output: false
   events:
-    output: false
+    output: true
+    permalink: /events/:path/
 
 defaults:
   - scope:
@@ -28,7 +32,7 @@ defaults:
       path: ""
       type: events
     values:
-      layout: null
+      layout: event
 
 plugins:
   - jekyll-seo-tag

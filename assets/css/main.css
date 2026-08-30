@@ -111,16 +111,12 @@ p  { margin: 0; }
   font-size: 1.125rem; color: var(--ink-muted); max-width: 62ch;
 }
 
-/* Events. Rows, not cards. */
-.event-list { margin-top: 40px; }
-.event-row {
-  display: flex; gap: 28px; align-items: flex-start;
-  padding-block: 26px; border-top: 1px solid var(--line);
-}
-.event-row:last-child { border-bottom: 1px solid var(--line); }
+/* Events. Cards in the same grid as the artists, so the two sections share
+   one plate, one title size, and one link row. The card carries the plate,
+   the title and the meta line. The blurb sits on the event page. */
 .event-when {
   position: relative; overflow: hidden;
-  flex: 0 0 240px; aspect-ratio: 4 / 3;
+  width: 100%; aspect-ratio: 4 / 3;
   display: flex; flex-direction: column; justify-content: flex-end;
   padding: 16px;
   background: var(--plate); border-radius: var(--r-flat);
@@ -137,14 +133,20 @@ p  { margin: 0; }
   background: linear-gradient(to top, rgba(0,0,0,.78), rgba(0,0,0,.18) 52%, transparent 78%);
 }
 .event-when.has-photo > span { position: relative; z-index: 1; color: #FFFFFF; }
-.event-body { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
 .credit { font-size: 0.75rem; font-weight: 500; color: var(--ink-muted); }
-.event-title { font-size: 1.0625rem; line-height: 1.25; font-weight: 600; }
 .event-meta {
-  display: flex; gap: 16px; flex-wrap: wrap;
+  display: flex; flex-direction: column; gap: 2px;
   font-size: 0.8125rem; font-weight: 600; color: var(--ink-muted);
 }
-.event-body .blurb { max-width: 68ch; }
+.event-card .card-name { font-size: 1.375rem; }
+
+/* Event page. Title, meta, plate, then the prose. The plate is narrower than
+   the text column, because a 4:3 plate at the full column is 480px tall and
+   pushes the first sentence off the screen. */
+.event-page .event-meta { margin: -12px 0 32px; }
+.event-page .card-plate { max-width: 440px; margin-bottom: 32px; }
+.event-page .links { margin-top: 32px; }
+.event-page .credit { margin-top: 16px; }
 
 /* Filters */
 .filters {
@@ -177,7 +179,7 @@ p  { margin: 0; }
   mask: var(--motif) center / cover no-repeat;
 }
 
-/* Artist grid */
+/* Card grid. The events section and the artists section share it. */
 .grid {
   display: grid; gap: 48px 32px;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -244,7 +246,5 @@ p  { margin: 0; }
 @media (max-width: 640px) {
   .header-inner { min-height: 0; }
   .site-nav { margin-left: 0; width: 100%; }
-  .event-row { flex-direction: column; gap: 16px; }
-  .event-when { flex-basis: auto; width: 100%; }
   .grid { gap: 40px 24px; }
 }
