@@ -56,11 +56,10 @@ neighborhood: Surrey            # must match a label in _config.yml `neighborhoo
 website: https://example.com    # optional
 instagram: their_handle         # optional, no @
 youtube: https://...            # optional
-teaches: false                  # data only. The card renders no badge. When a
-                                # listing does not teach, the blurb says so in
-                                # its last line. The styleguide allows a badge
-                                # only when it says something the blurb does
-                                # not, and here the blurb already does.
+teaches: false                  # data only. The card renders no badge, and the
+                                # blurb does not state it either. A listing that
+                                # does not teach simply says nothing about
+                                # teaching.
 image: artist-slug              # optional. Names a set of 3 widths in
                                 # assets/artists/. No extension, no path.
                                 # Without it the card shows a motif.
