@@ -88,6 +88,9 @@ title: "Kathak Vancouver: a directory of Kathak artists and teachers in the Lowe
 {% endif %}
 
 {% assign artists = site.artists | sort: 'name' %}
+{% assign featured = artists | where: 'featured', true %}
+{% assign other_artists = artists | where_exp: 'artist', 'artist.featured != true' %}
+{% assign artists = featured | concat: other_artists %}
 
 {%- comment -%}
   Neighboring sections must differ in ground. With no events the hero sits

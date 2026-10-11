@@ -6,6 +6,7 @@ neighborhood:
 website: https://palakdhiman.com/
 instagram:
 teaches: true
+featured: true
 tags:
   - Place des Arts (Coquitlam)
   - Online classes
