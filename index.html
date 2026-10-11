@@ -95,12 +95,15 @@ title: "Kathak Vancouver: a directory of Kathak artists and teachers in the Lowe
 {%- endcomment -%}
 <section class="section s-indigo{% if has_events == "" %} band{% endif %}" id="directory">
   <div class="wrap">
+    <span id="teachers"></span>
+    <span id="artists"></span>
     <h2 class="section-head">Teachers and artists</h2>
 
-    <div class="filters" role="region" aria-label="Filter by neighborhood">
+    <div class="filters" role="region" aria-label="Filter by neighborhood and teaching">
       <span class="label">Filter</span>
+      <button class="filter-btn" id="teachers-only" aria-pressed="false">Teachers only</button>
       <button class="filter-btn" data-filter="all" aria-pressed="true">All</button>
-      {% assign present = artists | map: 'neighborhood' | uniq | sort %}
+      {% assign present = artists | map: 'neighborhood' | join: '|' | split: '|' | uniq | sort %}
       {% for hood in site.neighborhoods %}
         {% if present contains hood %}
           <button class="filter-btn" data-filter="{{ hood | slugify }}" aria-pressed="false">{{ hood }}</button>
@@ -116,7 +119,8 @@ title: "Kathak Vancouver: a directory of Kathak artists and teachers in the Lowe
 
     <div class="grid" id="artist-grid">
       {% for artist in artists %}
-        <article class="card" data-neighborhood="{{ artist.neighborhood | slugify }}">
+        {% assign locations = artist.neighborhood | join: '|' | split: '|' %}
+        <article class="card" data-neighborhood="{% for hood in locations %}{{ hood | slugify }}{% unless forloop.last %},{% endunless %}{% endfor %}" data-teaches="{{ artist.teaches | default: false }}">
           {%- if artist.image -%}
           <div class="card-plate">
             {%- assign b = '/assets/artists/' | append: artist.image | relative_url -%}
@@ -130,7 +134,7 @@ title: "Kathak Vancouver: a directory of Kathak artists and teachers in the Lowe
           <div class="card-plate plate" style="--motif: url('{{ "/assets/motifs/" | append: motifs[mi] | append: ".svg" | relative_url }}')"></div>
           {%- endif -%}
           <h3 class="card-name">{{ artist.name }}</h3>
-          <div class="hood">{{ artist.neighborhood }}</div>
+          <div class="hood">{{ locations | join: ' · ' }}</div>
           <p class="blurb">{{ artist.content | strip_html | strip }}</p>
           {% if artist.tags and artist.tags.size > 0 %}
             <div class="tags">{{ artist.tags | join: " · " }}</div>
@@ -144,35 +148,65 @@ title: "Kathak Vancouver: a directory of Kathak artists and teachers in the Lowe
       {% endfor %}
     </div>
 
-    <div class="no-results" id="no-results">No artists are listed in that area yet. Select another neighborhood, or <a href="{{ '/submit/' | relative_url }}">add one</a>.</div>
+    <div class="no-results" id="no-results">No listings match these filters. Select another neighborhood, show all artists, or <a href="{{ '/submit/' | relative_url }}">add one</a>.</div>
   </div>
 </section>
 
 <script>
 (function () {
-  var buttons = document.querySelectorAll('.filter-btn');
+  var buttons = document.querySelectorAll('.filter-btn[data-filter]');
+  var teacherButton = document.getElementById('teachers-only');
   var cards = document.querySelectorAll('#artist-grid .card');
   var noResults = document.getElementById('no-results');
   var count = document.getElementById('result-count');
   var total = cards.length;
+  var neighborhood = 'all';
+  var teachersOnly = false;
 
-  function applyFilter(value) {
+  function applyFilter() {
     var visible = 0;
     cards.forEach(function (card) {
-      var match = value === 'all' || card.dataset.neighborhood === value;
+      var match = (neighborhood === 'all' || card.dataset.neighborhood.split(',').indexOf(neighborhood) !== -1)
+        && (!teachersOnly || card.dataset.teaches === 'true');
       card.classList.toggle('is-hidden', !match);
       if (match) visible++;
     });
     noResults.classList.toggle('show', visible === 0);
-    count.textContent = visible + (visible === 1 ? ' listing' : ' listings') + (value === 'all' ? '' : ' of ' + total);
+    count.textContent = visible + (visible === 1 ? ' listing' : ' listings') + (neighborhood === 'all' && !teachersOnly ? '' : ' of ' + total);
   }
 
   buttons.forEach(function (btn) {
     btn.addEventListener('click', function () {
       buttons.forEach(function (b) { b.setAttribute('aria-pressed', 'false'); });
       btn.setAttribute('aria-pressed', 'true');
-      applyFilter(btn.dataset.filter);
+      neighborhood = btn.dataset.filter;
+      applyFilter();
     });
   });
+
+  teacherButton.addEventListener('click', function () {
+    teachersOnly = !teachersOnly;
+    teacherButton.setAttribute('aria-pressed', String(teachersOnly));
+    applyFilter();
+  });
+
+  function selectDirectory(hash) {
+    if (hash !== '#teachers' && hash !== '#artists') return;
+    neighborhood = 'all';
+    teachersOnly = hash === '#teachers';
+    buttons.forEach(function (btn) {
+      btn.setAttribute('aria-pressed', String(btn.dataset.filter === 'all'));
+    });
+    teacherButton.setAttribute('aria-pressed', String(teachersOnly));
+    applyFilter();
+  }
+
+  document.querySelectorAll('[data-directory-filter]').forEach(function (link) {
+    link.addEventListener('click', function () {
+      selectDirectory('#' + link.dataset.directoryFilter);
+    });
+  });
+  window.addEventListener('hashchange', function () { selectDirectory(window.location.hash); });
+  selectDirectory(window.location.hash);
 })();
 </script>

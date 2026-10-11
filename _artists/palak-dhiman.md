@@ -1,6 +1,8 @@
 ---
 name: Palak Dhiman
-neighborhood: Vancouver
+neighborhood:
+  - Vancouver
+  - Coquitlam
 website: https://palakdhiman.com/
 instagram:
 teaches: true
